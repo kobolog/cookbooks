@@ -1,0 +1,5 @@
+location <%= @args['location'] %> {
+  <% @args.each do |command, args| %>
+    <%= parse_command command, args unless command == 'location' %>
+  <% end %>
+}

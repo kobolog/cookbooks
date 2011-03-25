@@ -1,0 +1,30 @@
+<%
+  defaults = {
+    'location' => '/',
+    'backend' => 'http://127.0.0.1:8080',
+    'proxy_redirect' => 'off'
+  }
+    
+  values = defaults.merge @args
+%>
+
+location <%= values['location'] %> {
+  proxy_pass <%= values['backend'] %>;
+  proxy_redirect <%= values['proxy_redirect'] %>;
+
+  proxy_set_header Host $http_host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+  proxy_connect_timeout 90;
+  proxy_send_timeout 90;
+  proxy_read_timeout 90;
+
+  proxy_buffer_size 4k;
+  # proxy_buffers 32k;
+  # proxy_busy_buffers_size 64k;
+  proxy_temp_file_write_size 64k;
+
+  client_max_body_size 10m;
+  client_body_buffer_size 128k;
+}

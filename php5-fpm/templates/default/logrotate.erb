@@ -1,0 +1,13 @@
+<%= node[:fpm][:log][:path] %> {
+  <%= node[:fpm][:log][:rotate] %>
+  rotate <%= node[:fpm][:log][:keep] %>
+  notifempty
+  missingok
+  compress
+  delaycompress
+  create 640 root adm
+
+  postrotate
+    [ ! -f /var/run/php5-fpm.pid ] || kill -USR1 `cat /var/run/php5-fpm.pid`
+  endscript
+}

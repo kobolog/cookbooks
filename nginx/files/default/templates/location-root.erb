@@ -1,0 +1,9 @@
+<%=
+  defaults = {
+    'location' => '/',
+    'root' => "/var/www/virtual-hosts/#{@sitename}",
+    'index' => 'index.php index.phtml index.html index.htm'
+  }
+  
+  include_template 'location-base', defaults.merge(@args)
+%>

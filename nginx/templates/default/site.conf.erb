@@ -1,0 +1,26 @@
+server {
+<% @prototype[:listen].each do |arg| %>
+  listen <%= arg %>;
+<% end %>
+
+<% @prototype[:names].each do |name| %>
+  server_name <%= name %>;
+<% end %>
+
+  access_log <%= @node[:nginx][:dirs][:logs] %>/<%= @sitename %>.access.log;
+  error_log <%= @node[:nginx][:dirs][:logs] %>/<%= @sitename %>.error.log;
+
+<% if @prototype.key? :charset %>
+  charset <%= @prototype[:charset] %>;
+<% end %>
+
+<% if @prototype.key? :ssl %>
+  ssl on;
+  ssl_certificate <%= @prototype[:ssl][:certificate] %>;
+  ssl_certificate_key <%= @prototype[:ssl][:key] %>;
+<% end %>
+
+<% @prototype[:templates].each do |t| %>
+  <%= parse_command t["name"], t["args"] %>
+<% end %>
+}

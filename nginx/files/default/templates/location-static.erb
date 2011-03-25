@@ -1,0 +1,10 @@
+<%=
+  defaults = {
+    'location' => '~* ^.+\.(bmp|bz2|css|doc|exe|f4v|flv|gif|gz|ico|jpeg|jpg|js|mp3|mp4|pdf|png|ppt|rar|rtf|swf|tar|tgz|txt|wav|xls|xml|zip)$',
+    'root' => "/var/www/static/#{@sitename}",
+    'expires' => '48h',
+    'access_log' => 'off'
+  }
+  
+  include_template 'location-base', defaults.merge(@args)
+%>

@@ -1,0 +1,40 @@
+user <%= @node[:nginx][:user] %>;
+worker_processes <%= @node[:nginx][:server][:workers][:processes] %>;
+
+error_log <%= @node[:nginx][:dirs][:logs] %>/error.log;
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections <%= @node[:nginx][:server][:workers][:connections] %>;
+    use epoll;
+}
+
+http {
+    default_type application/octet-stream;
+    access_log <%= @node[:nginx][:dirs][:logs] %>/access.log;
+
+<% @node[:nginx][:server][:settings].each do |parameter, value| %>
+    <%= parameter %> <%= value %>;
+<% end %>
+
+<% if @node[:nginx][:server][:gzip][:enabled] %>
+    gzip on;
+    gzip_http_version <%= @node[:nginx][:server][:gzip][:http_version] %>;
+    gzip_comp_level <%= @node[:nginx][:server][:gzip][:compression_level] %>;
+    gzip_types <%= @node[:nginx][:server][:gzip][:mime_types].join(' ') %>;
+    gzip_disable "<%= @node[:nginx][:server][:gzip][:disable_for] %>";
+<% end %>
+
+<% if @node[:nginx][:server][:upstreams] %>
+  <% @node[:nginx][:server][:upstreams].each do |name, args| %>
+    upstream <%= name %> {
+    <% args.each do |arg| %>
+      <%= arg %>;
+    <% end %>
+    }
+  <% end %>
+<% end %>
+
+    include <%= @node[:nginx][:dirs][:configs] %>conf.d/mime-types.conf;
+    include <%= @node[:nginx][:dirs][:configs] %>sites-enabled/*.conf;
+}

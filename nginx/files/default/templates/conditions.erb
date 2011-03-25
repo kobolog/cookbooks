@@ -1,0 +1,7 @@
+<% @args.each do |block| %>
+  if (<%= block["condition"] %>) {
+  <% block.each do |command, args| %>
+    <%= parse_command command, args unless command == 'condition' %>
+  <% end %>
+  }
+<% end %>
