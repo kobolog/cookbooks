@@ -26,13 +26,6 @@ remote_directory node[:nginx][:dirs][:templates] do
   files_mode "0600"
 end
 
-# Fetch custom templates
-remote_directory node[:nginx][:dirs][:custom_templates] do
-  source "custom_templates"
-  mode "0700"
-  files_mode "0600"
-end
-
 remote_directory node[:nginx][:dirs][:maintainance] do
   source "maintainance"
   mode "0755"
